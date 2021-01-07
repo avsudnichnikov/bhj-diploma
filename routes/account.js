@@ -7,6 +7,7 @@ const FileSync = require('lowdb/adapters/FileSync', {
     serialize: (data) => encrypt(JSON.stringify(data)),
     deserialize: (data) => JSON.parse(decrypt(data))
 });
+const db = low(new FileSync('db.json'));
 
 const getUser = () => db.get('users').find({isAuthorized: true});
 
@@ -21,7 +22,6 @@ router.post('/', upload.none(), function (request, response) {
 });
 
 router.get('/:id?', upload.none(), function (request, response) {
-    const db = low(new FileSync('db.json'));
     const user = getUser();
 
     const sumAccountSum = (account_id) => {
@@ -46,16 +46,13 @@ router.get('/:id?', upload.none(), function (request, response) {
 });
 
 function createAccount(response, name) {
-    const db = low(new FileSync('db.json'));
-    let user = getUser();
-    let userValue = user.value();
+    let userValue = getUser().value();
     let createdAccount = {name, user_id: userValue.id, id: uniqid()};
     db.get('accounts').push(createdAccount).write();
     response.json({success: true, account: createdAccount});
 }
 
 function removeAccount(response, id) {
-    const db = low(new FileSync('db.json'));
     let accounts = db.get('accounts');
     let removingAccount = accounts.find({id});
     if (removingAccount.value()) {
