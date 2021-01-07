@@ -26,13 +26,13 @@ class Modal {
     registerEvents() {
         this.closeBtns = Array.from(this.element.querySelectorAll('button[data-dismiss="modal"]'));
         this.closeBtns.forEach((closeBtn) => {
-            closeBtn.addEventListener('click', this.onClose);
+            closeBtn.addEventListener('click', this.onClose());
         })
     }
 
     unregisterEvents() {
         this.closeBtns.forEach((closeBtn) => {
-            closeBtn.removeEventListener('click', this.onClose);
+            closeBtn.removeEventListener('click', this.onClose());
         })
     }
 }
