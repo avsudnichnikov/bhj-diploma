@@ -1,5 +1,5 @@
 class AsyncForm {
-  constructor( element ) {
+  constructor(element) {
     if (!element) {
       throw new Error('Не заданы обязательные аргументы');
     }
@@ -18,12 +18,12 @@ class AsyncForm {
     return Object.fromEntries(new FormData(this.element));
   }
 
-  onSubmit( options ) {
+  onSubmit(options) {
 
   }
 
   submit() {
-    let data = this.getData();
-    this.onSubmit({data});
+    const data = this.getData();
+    this.onSubmit({ data });
   }
 }

@@ -1,5 +1,5 @@
 class BaseWidget {
-  constructor( element ) {
+  constructor(element) {
     if (!element) {
       throw new Error('Не заданы обязательные аргументы');
     }

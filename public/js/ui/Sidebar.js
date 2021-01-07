@@ -11,7 +11,7 @@ class Sidebar {
       event.preventDefault();
       sidebarMini.classList.toggle('sidebar-open');
       sidebarMini.classList.toggle('sidebar-collapse');
-    })
+    });
   }
 
   static initAuthLinks() {
@@ -33,7 +33,7 @@ class Sidebar {
       event.preventDefault();
       User.logout({}, (err, response) => {
         if (response && response.success) {
-          App.setState( 'init' );
+          App.setState('init');
         }
       });
     });

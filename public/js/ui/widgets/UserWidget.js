@@ -1,4 +1,4 @@
-class UserWidget extends BaseWidget{
+class UserWidget extends BaseWidget {
   update() {
     const user = User.current();
     if (user) {
