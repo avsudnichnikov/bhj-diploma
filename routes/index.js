@@ -7,4 +7,8 @@ router.use('/user', user);
 router.use('/account', account);
 router.use('/transaction', transaction);
 
+router.get("/apitest", function (request, response) {
+    response.json({success: false});
+})
+
 module.exports = router;
