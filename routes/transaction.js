@@ -8,14 +8,15 @@ const FileSync = require('lowdb/adapters/FileSync', {
     serialize: (data) => encrypt(JSON.stringify(data)),
     deserialize: (data) => JSON.parse(decrypt(data))
 });
-const db = low(new FileSync('db.json'));
 
 router.get("/", upload.none(), function (request, response) {
+    const db = low(new FileSync('db.json'));
     let transactions = db.get("transactions").filter({account_id: request.query.account_id}).value();
     response.json({success: true, data: transactions});
 });
 
 router.post("/", upload.none(), function (request, response) {
+    const db = low(new FileSync('db.json'));
     let transactions = db.get("transactions");
     const {_method} = request.body;
     if (_method === "DELETE") {

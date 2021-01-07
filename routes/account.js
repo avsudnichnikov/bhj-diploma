@@ -7,9 +7,6 @@ const FileSync = require('lowdb/adapters/FileSync', {
     serialize: (data) => encrypt(JSON.stringify(data)),
     deserialize: (data) => JSON.parse(decrypt(data))
 });
-const db = low(new FileSync('db.json'));
-
-const getUser = () => db.get('users').find({isAuthorized: true});
 
 router.post('/', upload.none(), function (request, response) {
     const {_method, name} = request.body;
@@ -22,7 +19,8 @@ router.post('/', upload.none(), function (request, response) {
 });
 
 router.get('/:id?', upload.none(), function (request, response) {
-    const user = getUser();
+    const db = low(new FileSync('db.json'));
+    const user = db.get('users').find({isAuthorized: true});
 
     const sumAccountSum = (account_id) => {
         const transactions = db.get('transactions').filter({account_id: account_id}).value();
@@ -46,15 +44,17 @@ router.get('/:id?', upload.none(), function (request, response) {
 });
 
 function createAccount(response, name) {
-    let userValue = getUser().value();
-    let createdAccount = {name, user_id: userValue.id, id: uniqid()};
+    const db = low(new FileSync('db.json'));
+    const userValue = db.get('users').find({isAuthorized: true}).value();
+    const createdAccount = {name, user_id: userValue.id, id: uniqid()};
     db.get('accounts').push(createdAccount).write();
     response.json({success: true, account: createdAccount});
 }
 
 function removeAccount(response, id) {
-    let accounts = db.get('accounts');
-    let removingAccount = accounts.find({id});
+    const db = low(new FileSync('db.json'));
+    const accounts = db.get('accounts');
+    const removingAccount = accounts.find({id});
     if (removingAccount.value()) {
         accounts.remove({id}).write();
         response.json({success: true});
