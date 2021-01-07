@@ -27,7 +27,12 @@ class User {
             method: 'POST',
             url: this.URL + '/login',
             data,
-            callback
+            callback: (err, response) => {
+                if(response && response.success) {
+                    this.setCurrent(response.user);
+                }
+                callback(err, response);
+            }
         });
     }
 
@@ -36,7 +41,12 @@ class User {
             method: 'POST',
             url: this.URL + '/register',
             data,
-            callback
+            callback: (err, response) => {
+                if(response && response.success) {
+                    this.setCurrent(response.user);
+                }
+                callback(err, response);
+            }
         });
     }
 
@@ -45,7 +55,12 @@ class User {
             method: 'POST',
             url: this.URL + '/logout',
             data,
-            callback
+            callback: (err, response) => {
+                if(response && response.success) {
+                    this.unsetCurrent();
+                }
+                callback(err, response);
+            }
         });
     }
 }
