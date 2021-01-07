@@ -60,9 +60,9 @@ router.post("/logout", function (request, response) {
 
 router.get("/current", function (request, response) {
     const db = low(new FileSync('db.json'));
-    let {id} = request.query;
-    let user = db.get("users").find({id});
-    let userValue = user.value();
+    const {id} = request.query;
+    const user = db.get("users").find({id});
+    const userValue = user.value();
     if (userValue && userValue.isAuthorized) {
         delete userValue.password;
         delete userValue.isAuthorized;
