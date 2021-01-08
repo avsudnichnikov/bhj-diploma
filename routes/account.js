@@ -26,10 +26,9 @@ router.get('/:id?', upload.none(), (request, response) => {
 
   const sumAccountSum = (account_id) => {
     const transactions = db.get('transactions').filter({ account_id }).value();
-    return transactions.reduce((sum, a) => (a.type === 'EXPENSE' ? sum - a.sum : sum + a.sum), 0);
+    return transactions.reduce((a, val) => (val.type === 'income') ? a + val.sum : a - val.sum, 0);
   };
 
-  const userValue = user.value();
   const { id } = request.params;
 
   if (id) {
@@ -37,7 +36,7 @@ router.get('/:id?', upload.none(), (request, response) => {
     account.sum = sumAccountSum(account.id);
     response.json({ success: true, data: account });
   } else {
-    const accounts = db.get('accounts').filter({ user_id: userValue.id }).value();
+    const accounts = db.get('accounts').filter({ user_id: user.value().id }).value();
     accounts.forEach((account) => {
       account.sum = sumAccountSum(account.id);
     });

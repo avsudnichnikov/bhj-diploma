@@ -17,12 +17,13 @@ router.get('/', upload.none(), (request, response) => {
   response.json({ success: true, data: transactions });
 });
 
-router.post('/', upload.none(), (request, response) => {
+router.post('/:id?', upload.none(), (request, response) => {
   const db = low(new FileSync('db.json'));
   const transactions = db.get('transactions');
   const { _method } = request.body;
   if (_method === 'DELETE') {
-    const { id } = request.body;
+    const { id } = request.params;
+    console.log(request.body);
     const removingTransaction = transactions.find({ id });
     if (removingTransaction.value()) {
       transactions.remove({ id }).write();
@@ -40,14 +41,13 @@ router.post('/', upload.none(), (request, response) => {
     if (!currentUser) {
       response.json({ success: false, error: 'Необходима авторизация' });
     } else if (reg.test(sum)) {
-      const currentUserId = currentUser.user_id;
       transactions.push({
         id: uniqid(),
-        type: type.toUpperCase(),
+        type: type.toLowerCase(),
         name,
         sum: +sum,
         account_id,
-        user_id: currentUserId,
+        user_id: currentUser.id,
         created_at: new Date().toISOString(),
       }).write();
       response.json({ success: true });

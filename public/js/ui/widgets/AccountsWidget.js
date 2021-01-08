@@ -25,16 +25,18 @@ class AccountsWidget extends BaseWidget {
     const user = User.current();
     if (user) {
       Account.list(user, (err, response) => {
-        if (response.success) {
+        if (response && response.success) {
           this.clear();
           response.data.forEach((item) => this.renderItem(item));
+        } else {
+          throw new Error(err);
         }
       });
     }
   }
 
   clear() {
-    console.log(this.element);
+    this.currentAccountId = null;
     this.element.querySelectorAll('.account').forEach((item) => item.remove());
   }
 
